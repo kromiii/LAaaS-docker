@@ -25,7 +25,8 @@ RUN . venv/bin/activate && \
         psycopg2-binary==2.9.3 \
         requests==2.28.1 \
         Werkzeug==2.0.3 \
-        WTForms==2.3.3
+        WTForms==2.3.3 \
+        cryptography==3.4.7  # Add this line to install cryptography
 
 ENV LANG en_US.utf-8
 ENV PATH /venv/bin:$PATH
