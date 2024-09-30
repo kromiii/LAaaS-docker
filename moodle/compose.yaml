@@ -6,9 +6,6 @@ services:
       - moodle-db
     ports:
       - "8000:80"
-    configs:
-      - source: moodle-config
-        target: /var/www/html/config.php
     volumes:
       - ./moodle/moodle:/var/www/html
       - moodledata:/var/www/moodledata
@@ -32,11 +29,9 @@ services:
     build: moodle/xapi
     image: public.ecr.aws/v8a6v1r8/moodle-xapi:2.10.0
     container_name: moodle-xapi
-    configs:
-      - source: xapi-config-app
-        target: /app/config/app.js
     volumes:
       - ./moodle/xapi/log:/app/log
+      - ./moodle/xapi/src/config/app.js:/app/config/app.js
     tty: true
     environment:
       - TZ=Asia/Tokyo
@@ -45,9 +40,8 @@ services:
     build: moodle/caliper
     image: public.ecr.aws/v8a6v1r8/moodle-caliper:2.4.1
     container_name: moodle-caliper
-    configs:
-      - source: caliper-config-lrw
-        target: /app/config/lrw.php
+    volumes:
+      - ./moodle/caliper/config/lrw.php:/app/config/lrw.php
     env_file:
       - ./moodle/caliper/.env
     depends_on:
@@ -76,13 +70,6 @@ services:
     volumes:
       - ./moodle/caliper-log/init:/docker-entrypoint-initdb.d
       - caliper-log-db:/var/lib/postgresql/data
-configs:
-  moodle-config:
-    file: ./moodle/config.php
-  xapi-config-app:
-    file: ./moodle/xapi/src/config/app.js
-  caliper-config-lrw:
-    file: ./moodle/caliper/config/lrw.php
 volumes:
   moodle-db:
   moodledata:
